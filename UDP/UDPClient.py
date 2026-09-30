@@ -2,11 +2,11 @@ import socket
 import pyaudio
 import time
 
-# ============ Configuração UDP ============
+#  Configuração UDP 
 UDP_IP = "127.0.0.1"    
 UDP_PORT = 1229
 
-# ============ Configuração de áudio ============
+
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
@@ -14,17 +14,17 @@ CHUNK = 1024
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-# ============ PyAudio (captura do microfone) ============
+#  PyAudio (captura do microfone) 
 audio = pyaudio.PyAudio()
 stream = audio.open(
     format=FORMAT,
     channels=CHANNELS,
     rate=RATE,
-    input=True,
+    input=True, # captura o aúdio em tempo real
     frames_per_buffer=CHUNK
 )
 
-# ============ Contador ============
+#  Contador 
 enviados = 0
 inicio = time.time()
 ultimo_print = time.time()
@@ -34,7 +34,7 @@ print("Pressione Ctrl+C para encerrar.\n")
 
 try:
     while True:
-        data = stream.read(CHUNK, exception_on_overflow=False)
+        data = stream.read(CHUNK, exception_on_overflow=False) # feita a leitura do bloco de áudio, 
         sock.sendto(data, (UDP_IP, UDP_PORT))
         enviados += 1
 
