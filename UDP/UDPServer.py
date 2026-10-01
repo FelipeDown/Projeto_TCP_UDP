@@ -4,11 +4,11 @@ import wave
 import os
 import time
 
-# ============ Configuração UDP ============
+# Configuração UDP 
 UDP_IP = "127.0.0.1"      
 UDP_PORT = 1229
 
-# ============ Configuração de áudio ============
+# Configuração de áudio do MIC 
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
@@ -16,28 +16,28 @@ CHUNK = 1024
 
 ARQUIVO_SAIDA = "gravacao.wav"
 
-# ============ Socket UDP ============
+#  Socket UDP 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock.bind((UDP_IP, UDP_PORT))
 sock.settimeout(0.5)   # permite capturar Ctrl+C
 
-# ============ PyAudio (reprodução ao vivo) ============
+#  PyAudio (reprodução ao vivo) 
 audio = pyaudio.PyAudio()
 stream = audio.open(
     format=FORMAT,
     channels=CHANNELS,
     rate=RATE,
-    output=True,
+    output=True, # responsável pela reprodução
     frames_per_buffer=CHUNK
 )
 
-# ============ Arquivo WAV ============
+#  Arquivo WAV 
 wf = wave.open(ARQUIVO_SAIDA, "wb")
 wf.setnchannels(CHANNELS)
-wf.setsampwidth(audio.get_sample_size(FORMAT))   # 2 bytes para paInt16
+wf.setsampwidth(audio.get_sample_size(FORMAT))  
 wf.setframerate(RATE)
 
-# ============ Contadores ============
+#  Contadores 
 contador = 0
 inicio = None
 ultimo_print = time.time()
@@ -79,7 +79,7 @@ finally:
     audio.terminate()
     sock.close()
 
-    # ============ Relatório final ============
+    #  Relatório final 
     if os.path.exists(ARQUIVO_SAIDA):
         tamanho = os.path.getsize(ARQUIVO_SAIDA)
         duracao = tamanho / (RATE * 2 * CHANNELS)
